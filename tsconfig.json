@@ -1,0 +1,8 @@
+﻿{
+  "compilerOptions": {
+    "outDir": "./built"
+  },
+
+  "compileOnSave": true,
+  "exclude": [ "node_modules" ]
+}
