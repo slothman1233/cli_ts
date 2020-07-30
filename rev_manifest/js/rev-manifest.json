@@ -1,0 +1,4 @@
+{
+  "gulp/jquery/jquery-1.8.3.min.js": "gulp/jquery/jquery-1.8.3.min.js?v=8888888888",
+  "test/file1.js": "test/file1.js?v=8888888888"
+}
