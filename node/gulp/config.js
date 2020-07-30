@@ -1,51 +1,43 @@
-var styles_dev = "Styles/dev/",
-    styles_dist = "Styles/dist/",
-    style_gulp = "Styles/gulp/",
-    styles_public_dev = "Styles/utils/public/",
-    styles_public_dist = "Styles/dist/public/",
+var work = "work/",
 
-    scripts_dev = "Scripts/dev/",
-    scripts_dist = "Scripts/dist/",
-    scripts_public_dev = "Scripts/public/",
-    scripts_public_dist = "Scripts/dist/public/",
+    styles_dev = work + "page",
+    styles_dist = "dist/styles",
 
-    gulpcss = "Styles/gulp/**/*.css",
-    gulpjs = "Scripts/gulp/**/*.js";
 
-utilscss = "Styles/utils/**/*.less";
+    scripts_dev = work + "page",
+    scripts_dist = "dist/scripts",
+
+    public_scripts_dev = work + "/public/script",
+    public_scripts_dist = "dist/public/script",
+
+    public_less_dev = work + "public/style",
+    public_less_dist = "dist/public/style";
+
 
 module.exports = {
-    js: {
-        dev: scripts_dist + "**/*.js",
-        dist: scripts_dist,
-        public_dev: scripts_public_dev + "**/*.js",
-        public_dist: scripts_public_dist
-    },
-    less: {
-        dev: styles_dev + "**/*.less",
-        dist: styles_dist,
-        gulp: style_gulp,
-        public_dev: styles_public_dev + "**/*.less",
-        public_dist: styles_public_dist
-    },
-    utils: {
-        less: utilscss
-    },
-    css: {
-        dev: styles_dev + "**/*.css", //开发的css地址
-        dist: styles_dist      //编译的css地址
-    },
-    gulp: {
-        dev_js: gulpjs,
-        dist_js: scripts_dist + "gulp",
 
-        dev_css: gulpcss,
-        dist_css: scripts_dist + "gulp"
+    js: { //用于压缩
+        dev: scripts_dev + "/**/*.ts",
+        dist: scripts_dist,
+
+    },
+
+    less: {
+        dev: styles_dev + "/**/*.less",
+        dist: styles_dist
+
+    },
+
+    public: {
+        script_dev: public_scripts_dev + "/index.ts",
+        script_dist: public_scripts_dist,
+
+        less_dev: public_less_dev + "/index.less",
+        less_dist: public_less_dist
     },
 
     clean: {
-        js: "Scripts/dist/**/*",
-        css: "Styles/dist/**/*",
+        dist: "dist/**/*",
         // noClean: "!style/dist/**/!(Public)*"
     },
 

@@ -1,4 +1,5 @@
 var gulp = require("gulp");
+var path = require("path");
 var browserify = require("browserify");
 var fs = require("fs");
 var less = require("gulp-less"); // less 编译
@@ -19,7 +20,7 @@ var watchify = require("watchify"); //实时更新ts
 var ts = require('gulp-typescript');
 var gulpif = require("gulp-if"); //判断
 var karmaServer = require('karma').Server;
-
+var watch = require('gulp-watch');
 var build = require('./node/gulp/build');
 var config = require("./node/gulp/config");
 var paths = build.paths;
@@ -29,6 +30,7 @@ notify = require('gulp-notify');
 plumber = require('gulp-plumber');
 
 var minimist = require('minimist'); //命令行参数解析引擎
+const gulpLess = require("gulp-less");
 var compress = minimist(process.argv.slice(2)).compress ? JSON.parse(minimist(process.argv.slice(2)).compress) : false;
 var iswatch = minimist(process.argv.slice(2)).watch ? JSON.parse(minimist(process.argv.slice(2)).watch) : false;
 
@@ -41,9 +43,9 @@ var defaults = function (cb, filename) {
     if (filename && paths.jspages.indexOf(filename) < 0) {
         return;
     }
-
     var file = filename ? filename : paths.jspages;
     file = isArrayFn(file) ? file : [file];
+
 
     file.forEach(i => {
         if (!objectFileAry[i]) objectFileAry[i] = {};
@@ -78,6 +80,13 @@ var defaults = function (cb, filename) {
 
 function bundle(w, file, i, cb) {
     (function (w, file, i, cb) {
+
+        var src = w.src.replace("\\work\\page\\", "\\dist\\scripts\\");
+
+        if (w.src.indexOf("\\public\\script\\") > 0 && w.sourceSrc == "index") {
+            src = w.src.replace("\\work\\public\\", "\\dist\\public\\");
+        }
+
         w.ify.on('error', handleErrors)
             //转换为gulp能识别的流
             .bundle()
@@ -87,11 +96,15 @@ function bundle(w, file, i, cb) {
             .pipe(buffer())
             .pipe(rev(compress))
             .pipe(logger({ showChange: true }))
-
-            .pipe(gulp.dest(w.src.replace("\\dev\\", "\\dist\\"))) //存放在dist文件夹下面
+            .pipe(gulp.dest(src)) //存放在dist文件夹下面
             .pipe(rev.manifest())
             .pipe(gulp.dest("./rev_manifest/js/"))
             .on('end', () => {
+
+                if (!file) {
+                    console.log(w.src + w.sourceSrc + ".ts" + "-> 编译完成！");
+                }
+                jsLodingOver = true;
                 try {
                     if (file.length - 1 === i) {
 
@@ -103,21 +116,17 @@ function bundle(w, file, i, cb) {
 
 }
 
-gulp.task("namespace", function (cb) {
-    return gulp.src('./Scripts/namespace/**/*.ts')
-        .pipe(ts({
-            noImplicitAny: true,
-            sourceMap: true,
-            declaration: true,
-            outFile: 'output.js'
-        }))
-        .pipe(gulp.dest('app/js'));
-})
+
 
 
 //压缩js
 gulp.task("js", function () {
-    return gulp.src("Scripts/dist/**/*.js")
+    return jsmin(config.js.dist + "/**/*.js", config.js.dist, "./rev_manifest/js/");
+})
+
+
+function jsmin(dev, dist, rev_manifest) {
+    return gulp.src(dev)
         .pipe(logger({ showChange: true }))
         .pipe(rev(compress))
         .pipe(gulpif(compress, uglify()))
@@ -125,90 +134,47 @@ gulp.task("js", function () {
             gutil.log(gutil.colors.red('[Error]'), err.toString());
         })
         .pipe(bom())
-        .pipe(gulp.dest(config.js.dist))
+        .pipe(gulp.dest(dist))
         .pipe(rev.manifest())
-        .pipe(gulp.dest("./rev_manifest/js/"));
+        .pipe(gulp.dest(rev_manifest));
+};
+////////////////////////////////   public    ///////////////////////////////////////////////
+//压缩public js
+gulp.task("public:js:min", function () {
+    return jsmin(config.public.script_dist + "/**/*.js", config.public.script_dist, "./rev_manifest/public/js");
 })
 
-//js的public的文件压缩生成版本并输出到dist/public里面
-gulp.task("public", function () {
-    return gulp.src(config.js.public_dev)
-        .pipe(logger({ showChange: true }))
-        .pipe(rev(compress))
-        .pipe(gulpif(compress, uglify()))
-        .on('error', function (err) {
-            gutil.log(gutil.colors.red('[Error]'), err.toString());
-        })
-        .pipe(bom())
-        .pipe(gulp.dest(config.js.public_dist))
-        .pipe(rev.manifest())
-        .pipe(gulp.dest("./rev_manifest/publicjs/"));
+//css的public的文件生成版本并输出到dist/public里面
+gulp.task("publicless", function () {
+    return gulpLessMin(config.public.less_dev, config.public.less_dist, "./rev_manifest/public/less/");
 })
 
-
-//gulp的js压缩和生成版本号
-gulp.task("gulpjs", function () {
-    return gulp.src([config.gulp.dev_js])
-        .pipe(logger({ showChange: true }))
-        .pipe(rev(false))
-        .on('error', function (err) {
-            gutil.log(gutil.colors.red('[Error]'), err.toString());
-        })
-        .pipe(bom())
-        .pipe(gulp.dest(config.gulp.dist_js))
-        .pipe(rev.manifest())
-        .pipe(gulp.dest("./rev_manifest/glup/js/"))
-})
-
-//gulp的css压缩和生成版本号
-gulp.task("gulpcssmin", function () {
-    return gulp.src([config.gulp.dev_css])
-        .pipe(logger({ showChange: true }))
-        .on('error', handleErrors)
-        .pipe(rename({ suffix: '' }))
-        .pipe(cleanCss({ compatibility: 'ie7' }))
-        .pipe(rev())
-        .pipe(bom())
-        .pipe(gulp.dest(config.gulp.dist_css))
-        .pipe(rev.manifest())
-        .pipe(gulp.dest("./rev_manifest/glup/js/"))
-})
-
-////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
 
 ///////////////////样式的处理///////////////////////////////
 
 //less的压缩生成版本号
 gulp.task("less", function () {
-    return gulp.src(config.less.dev)
-        .pipe(logger({ showChange: true }))
+    return gulpLessMin(config.less.dev, config.less.dist, "./rev_manifest/less/");
+})
+
+function gulpLessMin(dev, dist, rev_manifest) {
+    return gulpLessPipe(gulp.src(dev), dist, rev_manifest);
+}
+
+function gulpLessPipe(gulpSrc, dist, rev_manifest) {
+    return gulpSrc.pipe(logger({ showChange: true }))
         .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
         .pipe(less())
         .pipe(rev(compress))
         .pipe(rename({ suffix: '' }))
         .pipe(cleanCss({ compatibility: 'ie7' }))
         .pipe(bom())
-        .pipe(gulp.dest(config.less.dist))
+        .pipe(gulp.dest(dist))
         .pipe(rev.manifest())
-        .pipe(gulp.dest("./rev_manifest/less/"));
-})
+        .pipe(gulp.dest(rev_manifest));
+}
 
-//css的public的文件生成版本并输出到dist/public里面
-gulp.task("publicless", function () {
-    return gulp.src(config.less.public_dev)
-        .pipe(logger({ showChange: true }))
-        .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-        .pipe(less())
-        .pipe(rev(compress))
-        .pipe(rename({ suffix: '' }))
-        .pipe(cleanCss({ compatibility: 'ie7' }))
-        .pipe(bom())
-        .pipe(gulp.dest(config.less.public_dist))
-        .pipe(rev.manifest())
-        .pipe(gulp.dest("./rev_manifest/public/less/"));
-})
-
-///////////////////////////////////////////////////////////////
 
 //////////////////// 给页面添加版本号 //////////////////
 gulp.task('rev', function () {
@@ -216,9 +182,10 @@ gulp.task('rev', function () {
         .pipe(revCollector({
             replaceReved: true,
             dirReplacements: {
-                "Scripts/dist": "Scripts/dist", //不加的话，版本号添加不了
-                "Styles/dist": "Styles/dist",
-                "Styles/dist/public": "Styles/dist/public"
+                "dist/scripts": "dist/scripts", //不加的话，版本号添加不了
+                "dist/styles": "dist/styles",
+                "dist/public/script": "dist/public/script",
+                "dist/public/styles": "dist/public/styles"
             }
         }))
         .pipe(bom()) //一定要在输出前引入该包
@@ -229,8 +196,7 @@ gulp.task('rev', function () {
 //////////////////////// 删除js和css的dist文件 //////////////////////////
 gulp.task('clean', function () {
     return del([
-        config.clean.js,
-        config.clean.css,
+        config.clean.dist,
         // 这里我们使用一个通配模式来匹配 `mobile` 文件夹中的所有东西
         //  'dist/mobile/**/*',
         // 我们不希望删掉这个文件，所以我们取反这个匹配模式
@@ -238,37 +204,35 @@ gulp.task('clean', function () {
     ]);
 })
 //////////////////////////////////////////////////////////////
+//js的chagne会触发多次
+var jsLodingOver = true;
+gulp.task('watchUpdate', function (cb) {
 
-gulp.task('watchUpdate', function () {
-    // gulp.watch(["**/*.ts", "!**/node_modules/**"], fileWatch);
-
-    gulp.watch(config.less.dev, gulp.parallel("less"));
-    gulp.watch(config.utils.less, gulp.parallel('less', 'publicless'));
-    gulp.watch(config.less.public_dev, gulp.parallel('publicless'));
-
-    Object.keys(objectFileAry).forEach(i => {
-        objectFileAry[i].ify.on('update', () => { // 当任何依赖发生改变的时候，运行打包工具
-            bundle(objectFileAry[i])
-        })
+    //监听less样式的变化
+    gulp.watch(config.less.dev).on('change', function (src) {
+        gulpLessMin(src, config.less.dist, "./rev_manifest/less/");
+    });
+    //监听public less 样式的变化
+    gulp.watch(config.public.less_dev).on('change', function (src) {
+        gulpLessMin(src, config.public.less_dist, "./rev_manifest/public/less/");
+    });
+    //监听ts的改变触发
+    gulp.watch([config.js.dev, config.public.script_dev]).on('change', function (src) {
+        if (!jsLodingOver) return;
+        jsLodingOver = false;
+        //完整的路径
+        var src = path.resolve(__dirname, src);
+        console.log(src + "-> 编译中！");
+        bundle(objectFileAry[src]);
     })
+
 })
-
-function fileWatch(e) {
-    console.log(e.path);
-    if (fs.existsSync(e.path)) {
-        var stat = fs.statSync(e.path);
-        if (stat.isFile())
-            defaults(null, e.path);
-    }
-}
-
 
 gulp.task("devStart",
     gulp.series(
         'clean',
         'build',
-        gulp.parallel('gulpjs', 'less', 'publicless', 'public'),
-        'js'
+        gulp.parallel('less', 'publicless'),
     ),
 )
 
@@ -276,8 +240,7 @@ gulp.task("watch",
     gulp.series(
         'clean',
         'build',
-        gulp.parallel('gulpjs', 'less', 'publicless', 'public'),
-        'js',
+        gulp.parallel('less', 'publicless'),
         'watchUpdate'
     ))
 
@@ -285,8 +248,7 @@ gulp.task("gaStart",
     gulp.series(
         'clean',
         'build',
-        gulp.parallel('publicless', 'gulpjs', 'gulpcssmin', 'public'),
-        gulp.parallel('less', 'js'),
+        gulp.parallel('less', 'publicless', 'js', 'public:js:min'),
         'rev'
     ))
 
