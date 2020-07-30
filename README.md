@@ -7,11 +7,18 @@ npm run watch
 ```
 
 ### 命令说明
+```
+
 npm run watch 开发使用 自动监听文件变化进行生成   （不再会生成版本号    上次是什么版本就是什么版本）
+
 npm run devStart 生成开发版文件    （不再会生成版本号    上次是什么版本就是什么版本）
+
 npm run gaStart 生成生产版文件      （会根据文件的hash生成版本号）
+
+```
 ### 文件介绍 
 ```
+
 ├── work  开发文件夹
 │    ├── assets   资源文件夹
 │    │    │──  font 字体文件夹
@@ -39,4 +46,5 @@ npm run gaStart 生成生产版文件      （会根据文件的hash生成版本
      │    ├── build 需要生成的文件配置 在jspages里面配置需要生成的ts文件
      │    └── config gulp里面各个路径的配置文件
      └─── karma 单元测试的配置文件
+     
 ```
