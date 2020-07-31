@@ -111,7 +111,6 @@ function bundle(w, file, cb) {
                 jsLodingOver = true;
                 try {
                     if (file.length - 1 === index) {
-                        console.log(1232)
                         cb && cb();
                     } else {
                         index++;
