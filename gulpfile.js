@@ -96,7 +96,7 @@ function bundle(w, file, cb) {
             //转换为gulp能识别的流
             .bundle()
             //报错不跳出
-            .on('error', function (error) { console.error(error.toString() + 1); })
+            .on('error', function (error) { console.error(error.toString()); })
             .pipe(source(w.sourceSrc + '.js')) //生产出bundle.js
             .pipe(buffer())
             .pipe(rev(compress))
