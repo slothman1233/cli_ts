@@ -20,12 +20,11 @@ var watchify = require("watchify"); //实时更新ts
 var ts = require('gulp-typescript');
 var gulpif = require("gulp-if"); //判断
 var karmaServer = require('karma').Server;
-var watch = require('gulp-watch');
 var build = require('./node/gulp/build');
 var config = require("./node/gulp/config");
 var paths = build.paths;
 var isArrayFn = build.isArrayFn;
-
+var babelify = require("babelify");
 notify = require('gulp-notify');
 plumber = require('gulp-plumber');
 
@@ -39,14 +38,17 @@ gulp.task("build", function (cb, filename) {
 });
 
 var objectFileAry = [];
+var index = 0;
 var defaults = function (cb, filename) {
+    index = 0;
     if (filename && paths.jspages.indexOf(filename) < 0) {
         return;
     }
     var file = filename ? filename : paths.jspages;
     file = isArrayFn(file) ? file : [file];
 
-
+    // "tsify": "^4.0.2",
+    // "typescript": "^3.9.7",
     file.forEach(i => {
         if (!objectFileAry[i]) objectFileAry[i] = {};
         objectFileAry[i].src = i.slice(0, i.replace("/", '\\').lastIndexOf("\\") + 1);
@@ -57,10 +59,14 @@ var defaults = function (cb, filename) {
             debug: !compress, //允许在浏览器中直接调试TypeScript源码
             entries: [i],
             cache: {},
-            packageCache: {}
+            extensions: ['.ts'],
+
         })
             //使用tsify插件调用Browserify
-            .plugin(tsify)
+            //esModuleInterop 允许 import fs from 'fs'; 这种写法
+            //global 编译node_modules里面的ts和es6
+            .plugin(tsify, { esModuleInterop: true, global: true })
+            .transform(babelify) //注意这里，只有加上presets配置才能正常编译
 
         if (iswatch) {
             b = watchify(b)
@@ -71,27 +77,26 @@ var defaults = function (cb, filename) {
     })
 
 
-    var index = 0;
+
     Object.keys(objectFileAry).forEach(i => {
 
-        bundle(objectFileAry[i], file, index++, cb);
+        bundle(objectFileAry[i], file, cb);
     })
 }
 
-function bundle(w, file, i, cb) {
-    (function (w, file, i, cb) {
+function bundle(w, file, cb) {
+    (function (w, file, cb) {
 
         var src = w.src.replace("\\work\\page\\", "\\dist\\scripts\\");
 
         if (w.src.indexOf("\\public\\script\\") > 0 && w.sourceSrc == "index") {
             src = w.src.replace("\\work\\public\\", "\\dist\\public\\");
         }
-
         w.ify.on('error', handleErrors)
             //转换为gulp能识别的流
             .bundle()
             //报错不跳出
-            .on('error', function (error) { console.error(error.toString()); })
+            .on('error', function (error) { console.error(error.toString() + 1); })
             .pipe(source(w.sourceSrc + '.js')) //生产出bundle.js
             .pipe(buffer())
             .pipe(rev(compress))
@@ -100,19 +105,20 @@ function bundle(w, file, i, cb) {
             .pipe(rev.manifest())
             .pipe(gulp.dest("./rev_manifest/js/"))
             .on('end', () => {
-
                 if (!file) {
                     console.log(w.src + w.sourceSrc + ".ts" + "-> 编译完成！");
                 }
                 jsLodingOver = true;
                 try {
-                    if (file.length - 1 === i) {
-
+                    if (file.length - 1 === index) {
+                        console.log(1232)
                         cb && cb();
+                    } else {
+                        index++;
                     }
                 } catch (e) { }
             })
-    })(w, file, i, cb)
+    })(w, file, cb)
 
 }
 

@@ -1,4 +1,4 @@
-import HttpService from '@stl/request/dist/jsall'
+import HttpService from '@stl/request/src/index'
 
 const httpserver = new HttpService();
 
