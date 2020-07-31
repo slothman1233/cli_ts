@@ -2,5 +2,5 @@
 
 
   function s(){
-            var a = 122;
+            var a = 122; 
   }
