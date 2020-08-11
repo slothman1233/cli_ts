@@ -1,12 +1,13 @@
 var path = require("path");
 var paths = {
     jspages: [
-        getSrc("./dev/test/file1.ts"),
+        getSrc("./test/test.ts"),
+        getSrc("./index/index.ts"),
     ]
 };
 //获取文件的绝对地址
 function getSrc(src) {
-    return path.resolve(__dirname, '../../Scripts', src);
+    return path.resolve(__dirname, '../../work/page', src);
 }
 
 function isArrayFn(value) {
@@ -17,7 +18,7 @@ function isArrayFn(value) {
     }
 }
 
-
+paths.jspages.push(getSrc("../public/script/index.ts"));
 
 exports.paths = paths;
 exports.getSrc = getSrc;
