@@ -235,7 +235,7 @@ gulp.task('watchUpdate', function (cb) {
 
 gulp.task("devStart",
     gulp.series(
-        'clean',
+      //  'clean',
         'build',
         gulp.parallel('less', 'publicless'),
     ),
@@ -243,7 +243,7 @@ gulp.task("devStart",
 
 gulp.task("watch",
     gulp.series(
-        'clean',
+       // 'clean',
         'build',
         gulp.parallel('less', 'publicless'),
         'watchUpdate'
@@ -251,7 +251,7 @@ gulp.task("watch",
 
 gulp.task("gaStart",
     gulp.series(
-        'clean',
+       // 'clean',
         'build',
         gulp.parallel('less', 'publicless', 'js', 'public:js:min'),
         'rev'
