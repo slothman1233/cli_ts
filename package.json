@@ -12,7 +12,6 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@babel/polyfill": "^7.10.4",
         "@stl/httprequest": "^1.0.0",
         "@stl/tool-ts": "^0.1.9",
         "@stl/wl-gulp-rev": "^1.0.3",
