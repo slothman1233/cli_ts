@@ -217,12 +217,12 @@ gulp.task('watchUpdate',function (cb) {
     //监听less样式的变化
     gulp.watch(config.less.dev).on('change',function (src) {
         let path = src.replace(/\\/g,'/')
-        gulpLessMin(path,srcReplace(path),"./rev_manifest/less/");
+        gulpLessMin(path,config.less.dist + srcReplace(path,config.root),"./rev_manifest/less/");
     });
     //监听public less 样式的变化
     gulp.watch(config.public.less_dev).on('change',function (src) {
         let path = src.replace(/\\/g,'/')
-        gulpLessMin(path,srcReplace(path),"./rev_manifest/public/less/");
+        gulpLessMin(path,config.public.less_dist,"./rev_manifest/public/less/");
     });
     //监听ts的改变触发
     gulp.watch([config.js.dev,config.public.script_dev]).on('change',function (src) {
@@ -236,10 +236,10 @@ gulp.task('watchUpdate',function (cb) {
 
 })
 
-function srcReplace(src) {
-    let str = src.replace(config.root,'')
+function srcReplace(src,root) {
+    let str = src.replace(root,'')
     let lastIndex = str.lastIndexOf('/')
-    return config.less.dist + str.substr(0,lastIndex)
+    return str.substr(0,lastIndex)
 
 }
 
