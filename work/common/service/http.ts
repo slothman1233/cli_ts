@@ -1,5 +1,5 @@
-import HttpService from '@stl/request/src/index'
+import { http } from "@stl/httpRequest"
 
-const httpserver = new HttpService();
+// const httpserver = new HttpService();
 
-export default httpserver;
+export default http;

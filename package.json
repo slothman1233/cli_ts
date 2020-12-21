@@ -1,6 +1,6 @@
 {
     "name": "ts",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "",
     "main": "gulpfiles.js",
     "scripts": {
@@ -12,9 +12,8 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@babel/polyfill": "^7.10.4",
-        "@stl/request": "0.0.14",
-        "@stl/tool-ts": "^0.1.9",
+        "@stl/httprequest": "^1.0.0",
+        "@stl/tool-ts": "^1.0.3",
         "@stl/wl-gulp-rev": "^1.0.3",
         "@stl/wl-gulp-rev-collector": "^1.0.1",
         "@stl/wl-rev-path": "^1.0.2",

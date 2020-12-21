@@ -15,7 +15,8 @@ var work = "work/",
 
 
 module.exports = {
-
+    root: styles_dev,
+    publicRoot: work + "public",
     js: { //用于压缩
         dev: scripts_dev + "/**/*.ts",
         dist: scripts_dist,
