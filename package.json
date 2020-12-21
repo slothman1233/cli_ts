@@ -13,7 +13,7 @@
     "license": "ISC",
     "dependencies": {
         "@stl/httprequest": "^1.0.0",
-        "@stl/tool-ts": "^0.1.9",
+        "@stl/tool-ts": "^1.0.3",
         "@stl/wl-gulp-rev": "^1.0.3",
         "@stl/wl-gulp-rev-collector": "^1.0.1",
         "@stl/wl-rev-path": "^1.0.2",
