@@ -228,6 +228,10 @@ gulp.task('watchUpdate',function (cb) {
     //监听ts的改变触发
     gulp.watch([config.js.dev,config.public.script_dev]).on('change',function (src) {
         if (!jsLodingOver) return;
+        if (!objectFileAry[src]){
+            console.log(src + "-> 不能编辑，需要在node->gulp->build 进行配置！");
+            return;
+        }
         jsLodingOver = false;
         //完整的路径
         var src = path.resolve(__dirname,src);
