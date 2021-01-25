@@ -1,2 +1,3 @@
-import s from "./top"    
-var a = 144;
+import s from "./top"
+var a = 1344;
+console.log(a, s)
