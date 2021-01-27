@@ -24,7 +24,6 @@ module.exports = function (options = {}) {
 				entryPoints,
 				write: false,
 			}
-
 			// set outdir by default
 			if (!options.outdir && !options.outfile) {
 				params.outdir = '.'
@@ -76,7 +75,7 @@ module.exports.createGulpEsbuild = function () {
 					write: false,
 					incremental: true,
 				}
-
+				// console.log(!options.outdir && !options.outfile)
 				// set outdir by default
 				if (!options.outdir && !options.outfile) {
 					params.outdir = '.'
@@ -99,9 +98,10 @@ module.exports.createGulpEsbuild = function () {
 					}))
 				}
 
-				promise.outputFiles.forEach(file => {
+				promise.outputFiles.forEach((file, index) => {
+					// console.log(file.path, index)
 					this.push(new Vinyl({
-						path: file.path,
+						path: entryPoints[index].replace('.ts', '.js'),//file.path,
 						contents: Buffer.from(file.contents),
 					}))
 				})
