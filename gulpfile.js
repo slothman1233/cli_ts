@@ -41,43 +41,11 @@ let filepath = paths.jspages
 //js的chagne会触发多次
 var jsLodingOver = true;
 
-gulp.task("build", function (cb, filename) {
-    return gulp.src(filepath)
-        .on('error', function (error) { console.error(error.toString()); })
-        .pipe(gulpEsbuild({
-            bundle: true,
-            loader: {
-                '.ts': 'ts'
-            },
-            sourcemap: compress ? false : 'inline',
-            target: ["es6"],
-            // minify: compress,
-        }))
-
-        .pipe(logger({ showChange: true }))
-        .pipe(rev(compress))
-        .pipe(rename(function (path) {
-            if (path.dirname.indexOf('page\\') == 0) {
-                path.dirname = path.dirname.replace('page\\', 'scripts\\');
-            }
-        }))
-        .pipe(gulp.dest('dist'))
-        .pipe(rev.manifest())
-        .pipe(gulp.dest("./rev_manifest/js/"))
-
-        .on('end', () => {
-            cb();
-        })
+gulp.task("build", function (cb) {
+    return bundle(filepath, cb, false)
 });
 
-function bundle(src, cb) {
-    var distsrc = src.slice(0, src.replace("/", '\\').lastIndexOf("\\") + 1);
-    distsrc = distsrc.replace("work\\page\\", "dist\\scripts\\");
-
-    if (src.indexOf("public\\script\\") > 0) {
-        distsrc = distsrc.replace("work\\public\\", "dist\\public\\");
-    }
-
+function bundle(src, cb, overmessge = true) {
     return gulp.src(src)
         .on('error', function (error) { console.error(error.toString()); })
         .pipe(gulpEsbuild({
@@ -88,21 +56,27 @@ function bundle(src, cb) {
             target: ["es6"],
         }))
         .pipe(logger({ showChange: true }))
+        .pipe(rename(function (path) {
+            // console.log(path, JSON.stringify(a).slice(0, 500) + JSON.stringify(a).slice(-500), arguments.length)
+            //{ dirname: 'work\\page\\test', basename: 'test', extname: '.js'}
+            //去掉开头的work\\
+            path.dirname = path.dirname.replace(/^work\\/i, '');
+            //把page\\替换成scripts
+            if (path.dirname.indexOf('page\\') == 0) {
+                path.dirname = path.dirname.replace(/^page\\/i, 'scripts\\');
+            }
+        }))
         .pipe(rev(compress))
-        .pipe(gulp.dest(distsrc))
+        .pipe(gulp.dest('dist'))
         .pipe(rev.manifest())
         .pipe(gulp.dest("./rev_manifest/js/"))
 
         .on('end', () => {
-            console.log(src + " -> 编译完成！");
+            if (overmessge) console.log(src + " -> 编译完成！");
             jsLodingOver = true
             cb && cb();
         })
-
 }
-
-
-
 
 //压缩js
 gulp.task("js", function () {
