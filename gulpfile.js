@@ -207,24 +207,22 @@ function srcReplace(src, root) {
 gulp.task("devStart",
     gulp.series(
         //  'clean',
-        'build',
-        gulp.parallel('less', 'publicless'),
+        gulp.parallel('build', 'less', 'publicless'),
     ),
 )
 
 gulp.task("watch",
     gulp.series(
-        // 'clean',
-        'build',
-        gulp.parallel('less', 'publicless'),
+        // 'clean',   
+        gulp.parallel('build', 'less', 'publicless'),
         'watchUpdate'
     ))
 
 gulp.task("gaStart",
     gulp.series(
         // 'clean',
-        'build',
-        gulp.parallel('less', 'publicless', 'js', 'public:js:min'),
+        gulp.parallel('build', 'less', 'publicless'),
+        gulp.parallel('js', 'public:js:min'),
         'rev'
     ))
 
