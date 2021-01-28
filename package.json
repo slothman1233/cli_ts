@@ -62,6 +62,7 @@
     },
     "devDependencies": {
         "babel-core": "^6.26.3",
-        "babelify": "^8.0.0"
+        "babelify": "^8.0.0",
+        "babel-plugin-transform-runtime": "^6.23.0"
     }
 }

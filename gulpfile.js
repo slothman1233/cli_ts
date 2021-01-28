@@ -88,7 +88,16 @@ function jsmin(dev, dist, rev_manifest) {
     return gulp.src(dev)
         .pipe(gulpif(compress, babel({                   // 编译es6语法
             "presets": ["es2015", "stage-0"],
-            "plugins": ["transform-remove-strict-mode"]
+            "plugins": ["transform-remove-strict-mode", [
+                "transform-runtime",
+                {
+                    "helpers": false,
+                    "polyfill": false,
+                    "regenerator": true,
+                    "moduleName": "babel-runtime"
+                }
+            ]],
+            "compact": false
         })))
         .pipe(logger({ showChange: true }))
         .pipe(rev(compress))
