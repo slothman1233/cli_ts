@@ -142,7 +142,7 @@ function gulpLessPipe(gulpSrc, dist, rev_manifest) {
 
 //////////////////// 给页面添加版本号 //////////////////
 gulp.task('rev', function () {
-    return gulp.src(["rev_manifest/**/*.json", "../**/*.cshtml", "../**/*.html"])
+    return gulp.src(["rev_manifest/**/*.json", "../../**/*.cshtml", "../../**/*.html", '!**/node_modules/**/*'])
         .pipe(revCollector({
             replaceReved: true,
             dirReplacements: {
