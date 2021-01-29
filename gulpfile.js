@@ -104,6 +104,9 @@ var entries = function (dev) {
 }
 
 function jsmin(dev, dist, rev_manifest) {
+    if (glob.sync(path.resolve(dev)) <= 0) {
+        return gulp.src(dev)
+    }
     return gulp.src(dev)
         .pipe(named())
         .pipe(gulpif(compress, webpack({
