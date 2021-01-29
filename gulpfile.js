@@ -80,28 +80,57 @@ function bundle(src, cb, overmessge = true) {
 
 //压缩js
 gulp.task("js", function () {
-    return jsmin(config.js.dist + "/**/*.js", config.js.dist, "./rev_manifest/js/");
+    return jsmin(config.js.dist + "/**/*.js", "dist", "./rev_manifest/js/");
 })
 
+//引入glob
+var glob = require('glob')
+var webpack = require('webpack-stream');
+var named = require('vinyl-named');
+//entries函数
+var entries = function (dev) {
+    var jsDir = path.resolve(dev)
+
+    var entryFiles = glob.sync(jsDir)
+    var map = {};
+
+    for (var i = 0; i < entryFiles.length; i++) {
+        var filePath = entryFiles[i];
+        var filename = filePath.substring(filePath.lastIndexOf("/dist/") + 6, filePath.lastIndexOf('.'));
+        map[filename] = filePath;
+    }
+
+    return map;
+}
 
 function jsmin(dev, dist, rev_manifest) {
     return gulp.src(dev)
-        .pipe(gulpif(compress, babel({                   // 编译es6语法
-            "presets": ["es2015", "stage-0"],
-            "plugins": ["transform-remove-strict-mode", [
-                "transform-runtime",
-                {
-                    "helpers": false,
-                    "polyfill": false,
-                    "regenerator": true,
-                    "moduleName": "babel-runtime"
-                }
-            ]],
-            "compact": false
+        .pipe(named())
+        .pipe(gulpif(compress, webpack({
+            module: {
+                rules: [{
+                    test: /\.js$/,
+                    use: [
+                        {
+                            loader: 'babel-loader',
+                            options: {
+                                presets: ['@babel/env'],
+                                plugins: ["@babel/plugin-transform-runtime"]
+                            }
+                        }
+                    ],
+                    exclude: /node_modules/
+                }]
+            },
+            entry: entries(dev),
+            output: {
+                path: path.join(__dirname, "dist"),
+                filename: "[name].js"
+            },
         })))
         .pipe(logger({ showChange: true }))
         .pipe(rev(compress))
-        .pipe(gulpif(compress, uglify()))
+        // .pipe(gulpif(compress, uglify()))
         .on('error', function (err) {
             gutil.log(gutil.colors.red('[Error]'), err.toString());
         })
@@ -113,7 +142,7 @@ function jsmin(dev, dist, rev_manifest) {
 ////////////////////////////////   public    ///////////////////////////////////////////////
 //压缩public js
 gulp.task("public:js:min", function () {
-    return jsmin(config.public.script_dist + "/**/*.js", config.public.script_dist, "./rev_manifest/public/js");
+    return jsmin(config.public.script_dist + "/**/*.js", "dist", "./rev_manifest/public/js");
 })
 
 //css的public的文件生成版本并输出到dist/public里面
