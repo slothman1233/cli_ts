@@ -26,7 +26,6 @@ var config = require("./node/gulp/config");
 var paths = build.paths;
 var isArrayFn = build.isArrayFn;
 // var babelify = require("babelify");
-notify = require('gulp-notify');
 plumber = require('gulp-plumber');
 var babel = require('gulp-babel');
 
@@ -47,7 +46,7 @@ gulp.task("build", function (cb) {
 
 function bundle(src, cb, overmessge = true) {
     return gulp.src(src)
-        .on('error', function (error) { console.error(error.toString()); })
+        .pipe(gulperror.call(this))
         .pipe(gulpEsbuild({
             bundle: true,
             loader: {
@@ -66,6 +65,7 @@ function bundle(src, cb, overmessge = true) {
                 path.dirname = path.dirname.replace(/^page\\/i, 'scripts\\');
             }
         }))
+
         .pipe(rev(compress))
         .pipe(gulp.dest('dist'))
         .pipe(rev.manifest())
@@ -90,10 +90,8 @@ var named = require('vinyl-named');
 //entries函数
 var entries = function (dev) {
     var jsDir = path.resolve(dev)
-
     var entryFiles = glob.sync(jsDir)
     var map = {};
-
     for (var i = 0; i < entryFiles.length; i++) {
         var filePath = entryFiles[i];
         var filename = filePath.substring(filePath.lastIndexOf("/dist/") + 6, filePath.lastIndexOf('.'));
@@ -104,7 +102,11 @@ var entries = function (dev) {
 }
 
 function jsmin(dev, dist, rev_manifest) {
+    if (glob.sync(path.resolve(dev)).length <= 0) {
+        return gulp.src(dev)
+    }
     return gulp.src(dev)
+        .pipe(gulperror.call(this))
         .pipe(named())
         .pipe(gulpif(compress, webpack({
             module: {
@@ -131,9 +133,6 @@ function jsmin(dev, dist, rev_manifest) {
         .pipe(logger({ showChange: true }))
         .pipe(rev(compress))
         // .pipe(gulpif(compress, uglify()))
-        .on('error', function (err) {
-            gutil.log(gutil.colors.red('[Error]'), err.toString());
-        })
         .pipe(bom())
         .pipe(gulp.dest(dist))
         .pipe(rev.manifest())
@@ -166,7 +165,7 @@ function gulpLessMin(dev, dist, rev_manifest) {
 function gulpLessPipe(gulpSrc, dist, rev_manifest) {
 
     return gulpSrc.pipe(logger({ showChange: true }))
-        .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
+        .pipe(gulperror.call(this))
         .pipe(less())
         .pipe(rev(compress))
         .pipe(rename({ suffix: '' }))
@@ -234,6 +233,15 @@ gulp.task('watchUpdate', function (cb) {
     })
 
 })
+
+function gulperror() {
+    return plumber({
+        errorHandler: function (err) {
+            console.error(err.toString())
+            this.emit('end')
+        }
+    })
+}
 
 function srcReplace(src, root) {
     let str = src.replace(root, '')

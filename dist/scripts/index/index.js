@@ -1,1 +1,228 @@
-﻿!function(e){var t={};function n(r){if(t[r])return t[r].exports;var o=t[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)n.d(r,o,function(t){return e[t]}.bind(null,o));return r},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="",n(n.s=1)}([function(e,t){function n(t){return"function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?e.exports=n=function(e){return typeof e}:e.exports=n=function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},n(t)}e.exports=n},function(e,t,n){"use strict";n.r(t);var r,o,a,i,u,c,s,f=n(0),p=n.n(f);function l(e,t){var n;if("undefined"==typeof Symbol||null==e[Symbol.iterator]){if(Array.isArray(e)||(n=function(e,t){if(!e)return;if("string"==typeof e)return d(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);"Object"===n&&e.constructor&&(n=e.constructor.name);if("Map"===n||"Set"===n)return Array.from(e);if("Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return d(e,t)}(e))||t&&e&&"number"==typeof e.length){n&&(e=n);var r=0,o=function(){};return{s:o,n:function(){return r>=e.length?{done:!0}:{done:!1,value:e[r++]}},e:function(e){throw e},f:o}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var a,i=!0,u=!1;return{s:function(){n=e[Symbol.iterator]()},n:function(){var e=n.next();return i=e.done,e},e:function(e){u=!0,a=e},f:function(){try{i||null==n.return||n.return()}finally{if(u)throw a}}}}function d(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,r=new Array(t);n<t;n++)r[n]=e[n];return r}r=Object.create,o=Object.defineProperty,a=Object.getPrototypeOf,i=Object.prototype.hasOwnProperty,u=Object.getOwnPropertyNames,c=Object.getOwnPropertyDescriptor,s=function(e,t,n){if(function(e){o(e,"__esModule",{value:!0})}(e),t&&"object"===p()(t)||"function"==typeof t){var r,a=l(u(t));try{var s=function(){var a=r.value;i.call(e,a)||"default"===a||o(e,a,{get:function(){return t[a]},enumerable:!(n=c(t,a))||n.enumerable})};for(a.s();!(r=a.n()).done;)s()}catch(e){a.e(e)}finally{a.f()}}return e},function(e){return e&&e.__esModule?e:s(o(null!=e?r(a(e)):{},"default",{value:e,enumerable:!0}),e)}(function(e,t){return function(){return t||e((t={exports:{}}).exports,t),t.exports}}((function(e,t){!function(r,o){"object"==p()(e)&&void 0!==t?o(e):"function"==typeof define&&n(2)?define(["exports"],o):o((r="undefined"!=typeof globalThis?globalThis:r||self).indexjs={})}(e,(function(e){function t(e){return!!e&&"object"==p()(e)}function n(e){return t(e)&&"[object Object]"===Object.prototype.toString.call(e)&&e.constructor===Object}function r(e,n){var r;(r=e,t(r)?Object.keys(r):[]).forEach((function(t){return n(e[t],t)}))}function o(){for(var e=[],t=0;t<arguments.length;t++)e[t]=arguments[t];var a={};return e.forEach((function(e){e&&r(e,(function(e,t){n(e)?(n(a[t])||(a[t]={}),a[t]=o(a[t],e)):a[t]=e}))})),a}var a=window,i={ajax:function(e,t,n){var r;if(void 0===e&&(e={}),(r=o({url:"",type:"GET",dataType:"json",async:!0,data:null,headers:{},timeout:1e4,isFromdata:!1,beforeSend:function(e){},complete:function(e,t){}},e)).url&&r.type&&r.data&&r.dataType){var a=new XMLHttpRequest;a.addEventListener("loadstart",(function(e){r.beforeSend(a)})),a.addEventListener("load",(function(e){var r=a.status;if(200<=r&&r<=300||304===r){var o=void 0;if("text"===a.responseType)o=a.responseText;else if("document"===a.responseType)o=a.responseXML;else if(a.response){o="";try{o="[object String]"===Object.prototype.toString.call(a.response)?JSON.parse(a.response):a.response}catch(e){o=a.response}}else{o="";try{o="[object String]"===Object.prototype.toString.call(a.responseText)?JSON.parse(a.responseText):a.responseText}catch(e){o=a.responseText}}t(o)}else{var u=i.getErrorObj("请求错误","ERR0003",r);n(u)}})),a.addEventListener("loadend",(function(e){r.complete(a,a.status)})),a.addEventListener("error",(function(e){var t=i.getErrorObj("请求错误","ERR0003",a.status);n(t)})),a.addEventListener("timeout",(function(e){var t=i.getErrorObj("请求超时","ERR0002",408);n(t)}));var u,c=!1,s=r.type.toUpperCase();"GET"!==s&&"DELETE"!==s||(c=!0,r.url+=i.getUrlParam(r.url,r.data));try{a.open(r.type,r.url,r.async)}catch(e){var f=i.getErrorObj("初始化请求错误","ERR0001",a.status);return void n(f)}if(a.responseType=r.dataType,r.headers)for(var p=0,l=Object.keys(r.headers);p<l.length;p++){var d=l[p];a.setRequestHeader(d,r.headers[d])}r.async&&r.timeout&&(a.timeout=r.timeout),u=r.isFromdata?r.data:c?null:r.headers["Content-Type"]&&0<=r.headers["Content-Type"].indexOf("application/json")?JSON.stringify(r.data):i.getQueryString(r.data),a.send(u)}},getErrorObj:function(e,t,n){return{bodyMessage:null,code:"-1",message:e,subCode:t,status:n}},getUrlParam:function(e,t){if(!t)return"";var n=t instanceof Object?i.getQueryString(t):t;return-1!==e.indexOf("?")?n:"?"+n},getQueryString:function(e){var t=[];return e instanceof Object&&r(e,(function(e,n){var r=e;t.push(encodeURIComponent(n)+"="+encodeURIComponent(r))})),t.join("&")},request:function(e){void 0===e&&(e={}),e.beforeSend=(e.beforeSend||function(){}).before((function(e){}));var t=e.success;e.success=function(e,n,r){e&&e instanceof Object&&1!==e.code||t&&t(e,n,r)},e.error=(e.error||function(){}).before((function(e,t,n){})),e.complete=(e.complete||function(){}).after((function(e,t){})),i.ajax.before(i.addAuthorizationHeader)(e)},addAuthorizationHeader:function(e){e.headers=e.headers||{};var t="Authorization";Object.keys(e.headers).some((function(e){return e===t}))||(e.headers[t]="test")}};Function.prototype.before=function(e){var t=a;return function(){for(var n=[],r=0;r<arguments.length;r++)n[r]=arguments[r];e.apply(a,n),t.apply(a,n)}},Function.prototype.after=function(e){var t=a;return function(){for(var n=[],r=0;r<arguments.length;r++)n[r]=arguments[r];t.apply(a,n),e.apply(a,n)}};var u=function(e){this.dataType="json",this.data={},this.headers={},this.beforeSend=function(){},this.complete=function(){},this.headers=e.headers,this.type=e.type,this.isFromdata=e.isFromdata||!1},c={get:function(e){var t=o(new u({headers:{},type:"GET"}),e);return new Promise((function(e,n){i.ajax(t,e,n)}))},delete:function(e){var t=o(new u({headers:{},type:"DELETE"}),e);return new Promise((function(e,n){i.ajax(t,e,n)}))},post:function(e){var t=o(new u({headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},type:"POST"}),e);return new Promise((function(e,n){i.ajax(t,e,n)}))},put:function(e){var t=o(new u({headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8","X-HTTP-Method-Override":"put"},type:"POST"}),e);return new Promise((function(e,n){i.ajax(t,e,n)}))},postbody:function(e){var t=o(new u({headers:{"Content-Type":"application/json; charset=UTF-8"},type:"POST"}),e);return new Promise((function(e,n){i.ajax(t,e,n)}))},fromData:function(e){var t=o(new u({headers:{},type:"POST",isFromdata:!0}),e);return new Promise((function(e,n){i.ajax(t,e,n)}))}};e.http=c,Object.defineProperty(e,"__esModule",{value:!0})}))}))()).http.post({url:"/login/loginByAccount"})},function(e,t){(function(t){e.exports=t}).call(this,{})}]);
+(() => {
+  var __create = Object.create;
+  var __defProp = Object.defineProperty;
+  var __getProtoOf = Object.getPrototypeOf;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+  var __markAsModule = (target) => __defProp(target, "__esModule", {value: true});
+  var __commonJS = (callback, module) => () => {
+    if (!module) {
+      module = {exports: {}};
+      callback(module.exports, module);
+    }
+    return module.exports;
+  };
+  var __exportStar = (target, module, desc) => {
+    __markAsModule(target);
+    if (module && typeof module === "object" || typeof module === "function") {
+      for (let key of __getOwnPropNames(module))
+        if (!__hasOwnProp.call(target, key) && key !== "default")
+          __defProp(target, key, {get: () => module[key], enumerable: !(desc = __getOwnPropDesc(module, key)) || desc.enumerable});
+    }
+    return target;
+  };
+  var __toModule = (module) => {
+    if (module && module.__esModule)
+      return module;
+    return __exportStar(__defProp(module != null ? __create(__getProtoOf(module)) : {}, "default", {value: module, enumerable: true}), module);
+  };
+
+  // node_modules/@stl/httpRequest/dist/index.js
+  var require_dist = __commonJS((exports, module) => {
+    !function(e, t) {
+      typeof exports == "object" && typeof module != "undefined" ? t(exports) : typeof define == "function" && define.amd ? define(["exports"], t) : t((e = typeof globalThis != "undefined" ? globalThis : e || self).indexjs = {});
+    }(exports, function(e) {
+      "use strict";
+      function t(e2) {
+        return !!e2 && typeof e2 == "object";
+      }
+      function r(e2) {
+        return t(e2) && Object.prototype.toString.call(e2) === "[object Object]" && e2.constructor === Object;
+      }
+      var o = function(e2) {
+        return t(e2) ? Object.keys(e2) : [];
+      };
+      function a(t2, n2) {
+        o(t2).forEach(function(e2) {
+          return n2(t2[e2], e2);
+        });
+      }
+      function p() {
+        for (var e2 = [], t2 = 0; t2 < arguments.length; t2++)
+          e2[t2] = arguments[t2];
+        var n2 = {};
+        return e2.forEach(function(e3) {
+          e3 && a(e3, function(e4, t3) {
+            r(e4) ? (r(n2[t3]) || (n2[t3] = {}), n2[t3] = p(n2[t3], e4)) : n2[t3] = e4;
+          });
+        }), n2;
+      }
+      var y = {timeOut: "\u8BF7\u6C42\u8D85\u65F6", noAuthority: "\u6CA1\u6709\u6743\u9650", parameterError: "\u53C2\u6570\u6709\u8BEF"}, i = window, l = {ajax: function(e2, o2, a2) {
+        var t2;
+        if (e2 === void 0 && (e2 = {}), (t2 = p({url: "", type: "GET", dataType: "json", async: true, data: null, headers: {}, timeout: 1e4, isFromdata: false, beforeSend: function(e3) {
+        }, complete: function(e3, t3) {
+        }}, e2)).url && t2.type && t2.data && t2.dataType) {
+          var i2 = new XMLHttpRequest();
+          i2.addEventListener("loadstart", function(e3) {
+            t2.beforeSend(i2);
+          }), i2.addEventListener("load", function(e3) {
+            var t3 = i2.status;
+            if (200 <= t3 && t3 <= 300 || t3 === 304) {
+              var n3 = void 0;
+              if (i2.responseType === "text")
+                n3 = i2.responseText;
+              else if (i2.responseType === "document")
+                n3 = i2.responseXML;
+              else if (i2.response) {
+                n3 = "";
+                try {
+                  n3 = Object.prototype.toString.call(i2.response) === "[object String]" ? JSON.parse(i2.response) : i2.response;
+                } catch (e4) {
+                  n3 = i2.response;
+                }
+              } else {
+                n3 = "";
+                try {
+                  n3 = Object.prototype.toString.call(i2.responseText) === "[object String]" ? JSON.parse(i2.responseText) : i2.responseText;
+                } catch (e4) {
+                  n3 = i2.responseText;
+                }
+              }
+              o2(n3);
+            } else {
+              var r3 = l.getErrorObj("\u8BF7\u6C42\u9519\u8BEF", "ERR0003", t3);
+              a2(r3);
+            }
+          }), i2.addEventListener("loadend", function(e3) {
+            t2.complete(i2, i2.status);
+          }), i2.addEventListener("error", function(e3) {
+            var t3 = l.getErrorObj("\u8BF7\u6C42\u9519\u8BEF", "ERR0003", i2.status);
+            a2(t3);
+          }), i2.addEventListener("timeout", function(e3) {
+            var t3 = l.getErrorObj("\u8BF7\u6C42\u8D85\u65F6", "ERR0002", 408);
+            a2(t3);
+          });
+          var n2, r2 = false, s3 = t2.type.toUpperCase();
+          s3 !== "GET" && s3 !== "DELETE" || (r2 = true, t2.url += l.getUrlParam(t2.url, t2.data));
+          try {
+            i2.open(t2.type, t2.url, t2.async);
+          } catch (e3) {
+            var u = l.getErrorObj("\u521D\u59CB\u5316\u8BF7\u6C42\u9519\u8BEF", "ERR0001", i2.status);
+            return void a2(u);
+          }
+          if (i2.responseType = t2.dataType, t2.headers)
+            for (var c = 0, f = Object.keys(t2.headers); c < f.length; c++) {
+              var d = f[c];
+              i2.setRequestHeader(d, t2.headers[d]);
+            }
+          t2.async && t2.timeout && (i2.timeout = t2.timeout), n2 = t2.isFromdata ? t2.data : r2 ? null : t2.headers["Content-Type"] && 0 <= t2.headers["Content-Type"].indexOf("application/json") ? JSON.stringify(t2.data) : l.getQueryString(t2.data), i2.send(n2);
+        } else
+          y.parameterError;
+      }, getErrorObj: function(e2, t2, n2) {
+        return {bodyMessage: null, code: "-1", message: e2, subCode: t2, status: n2};
+      }, getUrlParam: function(e2, t2) {
+        if (!t2)
+          return "";
+        var n2 = t2 instanceof Object ? l.getQueryString(t2) : t2;
+        return e2.indexOf("?") !== -1 ? n2 : "?" + n2;
+      }, getQueryString: function(e2) {
+        var r2 = [];
+        return e2 instanceof Object && a(e2, function(e3, t2) {
+          var n2 = e3;
+          r2.push(encodeURIComponent(t2) + "=" + encodeURIComponent(n2));
+        }), r2.join("&");
+      }, request: function(e2) {
+        e2 === void 0 && (e2 = {});
+        function r2(e3, t2) {
+          t2 === 401 ? y.noAuthority : t2 === 408 && y.timeOut;
+        }
+        e2.beforeSend = (e2.beforeSend || function() {
+        }).before(function(e3) {
+        });
+        var o2 = e2.success;
+        e2.success = function(e3, t2, n2) {
+          e3 && e3 instanceof Object && e3.code !== 1 ? r2(0, t2) : o2 && o2(e3, t2, n2);
+        }, e2.error = (e2.error || function() {
+        }).before(function(e3, t2, n2) {
+          r2(0, t2);
+        }), e2.complete = (e2.complete || function() {
+        }).after(function(e3, t2) {
+        }), l.ajax.before(l.addAuthorizationHeader)(e2);
+      }, addAuthorizationHeader: function(e2) {
+        e2.headers = e2.headers || {};
+        var t2 = "Authorization";
+        Object.keys(e2.headers).some(function(e3) {
+          return e3 === t2;
+        }) || (e2.headers[t2] = "test");
+      }};
+      Function.prototype.before = function(n2) {
+        var r2 = i;
+        return function() {
+          for (var e2 = [], t2 = 0; t2 < arguments.length; t2++)
+            e2[t2] = arguments[t2];
+          n2.apply(i, e2), r2.apply(i, e2);
+        };
+      }, Function.prototype.after = function(n2) {
+        var r2 = i;
+        return function() {
+          for (var e2 = [], t2 = 0; t2 < arguments.length; t2++)
+            e2[t2] = arguments[t2];
+          r2.apply(i, e2), n2.apply(i, e2);
+        };
+      };
+      var s2 = function(e2) {
+        this.dataType = "json", this.data = {}, this.headers = {}, this.beforeSend = function() {
+        }, this.complete = function() {
+        }, this.headers = e2.headers, this.type = e2.type, this.isFromdata = e2.isFromdata || false;
+      }, n = {get: function(e2) {
+        var n2 = p(new s2({headers: {}, type: "GET"}), e2);
+        return new Promise(function(e3, t2) {
+          l.ajax(n2, e3, t2);
+        });
+      }, delete: function(e2) {
+        var n2 = p(new s2({headers: {}, type: "DELETE"}), e2);
+        return new Promise(function(e3, t2) {
+          l.ajax(n2, e3, t2);
+        });
+      }, post: function(e2) {
+        var n2 = p(new s2({headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"}, type: "POST"}), e2);
+        return new Promise(function(e3, t2) {
+          l.ajax(n2, e3, t2);
+        });
+      }, put: function(e2) {
+        var n2 = p(new s2({headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "X-HTTP-Method-Override": "put"}, type: "POST"}), e2);
+        return new Promise(function(e3, t2) {
+          l.ajax(n2, e3, t2);
+        });
+      }, postbody: function(e2) {
+        var n2 = p(new s2({headers: {"Content-Type": "application/json; charset=UTF-8"}, type: "POST"}), e2);
+        return new Promise(function(e3, t2) {
+          l.ajax(n2, e3, t2);
+        });
+      }, fromData: function(e2) {
+        var n2 = p(new s2({headers: {}, type: "POST", isFromdata: true}), e2);
+        return new Promise(function(e3, t2) {
+          l.ajax(n2, e3, t2);
+        });
+      }};
+      e.http = n, Object.defineProperty(e, "__esModule", {value: true});
+    });
+  });
+
+  // work/common/service/http.ts
+  var import_httpRequest = __toModule(require_dist());
+  var http_default = import_httpRequest.http;
+
+  // work/common/service/LoginService/LoginService.ts
+  var login = (info) => http_default.post({
+    url: "/login/loginByAccount"
+  });
+
+  // work/page/index/index.ts
+  login({username: "ss", password: "s"});
+  function s() {
+    let a = 122;
+  }
+  s();
+})();
