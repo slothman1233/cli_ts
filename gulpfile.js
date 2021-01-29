@@ -109,6 +109,7 @@ function jsmin(dev, dist, rev_manifest) {
         .pipe(gulperror.call(this))
         .pipe(named())
         .pipe(gulpif(compress, webpack({
+            mode:"none",
             module: {
                 rules: [{
                     test: /\.js$/,
