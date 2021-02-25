@@ -48,6 +48,7 @@ function bundle(src, cb, overmessge = true) {
     return gulp.src(src)
         .pipe(gulperror.call(this))
         .pipe(gulpEsbuild({
+            sourcemap: compress ? false : 'inline',
             bundle: true,
             loader: {
                 '.ts': 'ts'
@@ -109,7 +110,7 @@ function jsmin(dev, dist, rev_manifest) {
         .pipe(gulperror.call(this))
         .pipe(named())
         .pipe(gulpif(compress, webpack({
-            mode:"none",
+            mode: "none",
             module: {
                 rules: [{
                     test: /\.js$/,
