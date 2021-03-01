@@ -134,7 +134,7 @@ function jsmin(dev, dist, rev_manifest) {
         })))
         .pipe(logger({ showChange: true }))
         .pipe(rev(compress))
-        // .pipe(gulpif(compress, uglify()))
+        .pipe(gulpif(compress, uglify()))
         .pipe(bom())
         .pipe(gulp.dest(dist))
         .pipe(rev.manifest())
