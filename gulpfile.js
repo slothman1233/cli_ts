@@ -111,7 +111,7 @@ function jsmin(dev, dist, rev_manifest) {
         .pipe(gulpif(compress, webpack({
             mode: "production",
             module: {
-                rules: [{
+                rules: [{  
                     test: /\.js$/,
                     use: [
                         {
