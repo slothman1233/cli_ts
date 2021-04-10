@@ -1,12 +1,12 @@
 var gulp = require("gulp");
 var path = require("path");
-var browserify = require("browserify");
+// var browserify = require("browserify");
 var fs = require("fs");
 var less = require("gulp-less"); // less 编译
-var source = require('vinyl-source-stream');
-var buffer = require('gulp-buffer'); //把流转成buffer
-var tsify = require("tsify"); //就像gulp-typescript一样
-var handleErrors = require('./node/gulp/handleError');
+// var source = require('vinyl-source-stream');
+// var buffer = require('gulp-buffer'); //把流转成buffer
+// var tsify = require("tsify"); //就像gulp-typescript一样
+// var handleErrors = require('./node/gulp/handleError');
 var cleanCss = require("gulp-clean-css"); //压缩cssr
 var del = require('del'); //删除文件1
 var rename = require("gulp-rename"); //  重命名
@@ -14,26 +14,25 @@ var logger = require('gulp-logger');
 var rev = require('@stl/wl-gulp-rev');
 var revCollector = require('@stl/wl-gulp-rev-collector');
 var bom = require('gulp-bom');
-var gutil = require("gulp-util");      // 重命名
-// var uglify = require("gulp-uglify");
-var uglify = require('gulp-uglify-es').default;
-var watchify = require("watchify"); //实时更新ts
-var ts = require('gulp-typescript');
+// var gutil = require("gulp-util");      // 重命名
+var uglify = require("gulp-uglify");
+// var uglify = require('gulp-uglify-es').default;
+// var watchify = require("watchify"); //实时更新ts
+// var ts = require('gulp-typescript');
 var gulpif = require("gulp-if"); //判断
 var karmaServer = require('karma').Server;
 var build = require('./node/gulp/build');
 var config = require("./node/gulp/config");
 var paths = build.paths;
-var isArrayFn = build.isArrayFn;
+// var isArrayFn = build.isArrayFn;
 // var babelify = require("babelify");
 plumber = require('gulp-plumber');
-var babel = require('gulp-babel');
+// var babel = require('gulp-babel');
 
 const { createGulpEsbuild } = require('./node/common/gulp_esbuild')
 const gulpEsbuild = createGulpEsbuild()
 
 var minimist = require('minimist'); //命令行参数解析引擎
-const gulpLess = require("gulp-less");
 var compress = minimist(process.argv.slice(2)).compress ? JSON.parse(minimist(process.argv.slice(2)).compress) : false;
 var iswatch = minimist(process.argv.slice(2)).watch ? JSON.parse(minimist(process.argv.slice(2)).watch) : false;
 let filepath = paths.jspages
@@ -48,6 +47,7 @@ function bundle(src, cb, overmessge = true) {
     return gulp.src(src)
         .pipe(gulperror.call(this))
         .pipe(gulpEsbuild({
+            sourcemap: compress ? false : 'inline',
             bundle: true,
             loader: {
                 '.ts': 'ts'
@@ -109,7 +109,7 @@ function jsmin(dev, dist, rev_manifest) {
         .pipe(gulperror.call(this))
         .pipe(named())
         .pipe(gulpif(compress, webpack({
-            mode:"none",
+            mode: "production",
             module: {
                 rules: [{
                     test: /\.js$/,
@@ -133,7 +133,7 @@ function jsmin(dev, dist, rev_manifest) {
         })))
         .pipe(logger({ showChange: true }))
         .pipe(rev(compress))
-        // .pipe(gulpif(compress, uglify()))
+        .pipe(gulpif(compress, uglify()))
         .pipe(bom())
         .pipe(gulp.dest(dist))
         .pipe(rev.manifest())
