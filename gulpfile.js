@@ -11,8 +11,8 @@ var cleanCss = require("gulp-clean-css"); //压缩cssr
 var del = require('del'); //删除文件1
 var rename = require("gulp-rename"); //  重命名
 var logger = require('gulp-logger');
-var rev = require('@stl/wl-gulp-rev');
-var revCollector = require('@stl/wl-gulp-rev-collector');
+var rev = require('wl-gulp-rev');
+var revCollector = require('wl-gulp-rev-collector');
 var bom = require('gulp-bom');
 var gutil = require("gulp-util"); // 重命名
 // var uglify = require("gulp-uglify");
@@ -99,8 +99,7 @@ var entries = function(dev) {
         map[filename] = filePath;
     }
 
-    console.log(dev)
-    console.log(map)
+
 
     return map;
 }
