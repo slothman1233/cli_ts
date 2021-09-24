@@ -2,9 +2,7 @@ var path = require("path");
 var paths = {
     jspages: [
         "./test/test.ts",
-        "./index/index.ts",
-        getSrc("./test/test.ts"),
-        getSrc("./index/index.ts"),
+        "./index/index.ts"
     ]
 };
 //获取文件的绝对地址
